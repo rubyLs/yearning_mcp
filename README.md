@@ -1,8 +1,39 @@
-# yearning-mcp（TypeScript）
+# @rubyls/yearning-mcp
 
-Yearning SQL 审核平台的 MCP Server。覆盖市场上常见「只读查询」之外的完整工单能力：**提交 DDL/DML 工单、审核（同意/驳回）、撤回、查询申请、评论**，以及数据源/表结构探查与只读 SELECT。
+Yearning SQL 审核平台的 MCP Server（TypeScript）。不只读查询，还覆盖完整工单能力：**提交 DDL/DML、审核（同意/驳回）、撤回、查询申请、评论**，以及数据源/表结构探查。
 
-基于 Yearning REST / WebSocket API（`/api/v2`，JWT Bearer 认证）。列表类与查询执行走 WebSocket，其余为 REST。
+基于 Yearning REST / WebSocket API（`/api/v2`，JWT Bearer）。列表类与查询执行走 WebSocket，其余为 REST。
+
+仓库：https://github.com/rubyLs/yearning_mcp
+
+## 快速接入（推荐）
+
+发布到 npm 后，在 Cursor / Claude Desktop 的 MCP 配置中：
+
+```json
+{
+  "mcpServers": {
+    "yearning": {
+      "command": "npx",
+      "args": ["-y", "@rubyls/yearning-mcp"],
+      "env": {
+        "YEARNING_URL": "http://your-yearning:8000",
+        "YEARNING_USERNAME": "your-user",
+        "YEARNING_PASSWORD": "your-password",
+        "YEARNING_LOGIN_TYPE": "general",
+        "YEARNING_READ_ONLY": "false"
+      }
+    }
+  }
+}
+```
+
+也可全局安装后使用：
+
+```bash
+npm i -g @rubyls/yearning-mcp
+yearning-mcp
+```
 
 ## 功能一览
 
@@ -29,7 +60,7 @@ Yearning SQL 审核平台的 MCP Server。覆盖市场上常见「只读查询�
 
 | 工具 | 说明 |
 |------|------|
-| `yearning_submit_order` | 提交 SQL 工单（需 `confirm=true`） |
+| `yearning_submit_order` | 提交 SQL 工单（需 `confirm=true`；`backup=1` 开启回滚备份） |
 | `yearning_undo_order` | 撤回未执行工单（需 `confirm=true`） |
 | `yearning_audit_order` | 审核：agree / reject / undo（需 `confirm=true`） |
 | `yearning_submit_query_order` | 提交查询申请 |
@@ -42,81 +73,6 @@ Yearning SQL 审核平台的 MCP Server。覆盖市场上常见「只读查询�
 ```
 yearning_sql_check → yearning_submit_order → yearning_order_timeline → yearning_audit_order
 ```
-
-## 快速开始
-
-### 1. 安装
-
-```bash
-npm install
-npm run build
-```
-
-### 2. 配置环境变量
-
-复制 `.env.example`，至少填写：
-
-```bash
-YEARNING_URL=http://your-yearning:8000
-YEARNING_USERNAME=your-user
-YEARNING_PASSWORD=your-password
-YEARNING_READ_ONLY=false   # 开启提交/审核等写工具
-```
-
-### 3. Cursor / Claude Desktop（stdio）
-
-```json
-{
-  "mcpServers": {
-    "yearning": {
-      "command": "node",
-      "args": ["/absolute/path/to/yearning_mcp/dist/index.js"],
-      "env": {
-        "YEARNING_URL": "http://localhost:8000",
-        "YEARNING_USERNAME": "your-user",
-        "YEARNING_PASSWORD": "your-password",
-        "YEARNING_LOGIN_TYPE": "general",
-        "YEARNING_READ_ONLY": "false"
-      }
-    }
-  }
-}
-```
-
-开发时也可用：
-
-```json
-{
-  "mcpServers": {
-    "yearning": {
-      "command": "npx",
-      "args": ["tsx", "/absolute/path/to/yearning_mcp/src/index.ts"],
-      "env": {
-        "YEARNING_URL": "http://localhost:8000",
-        "YEARNING_USERNAME": "your-user",
-        "YEARNING_PASSWORD": "your-password",
-        "YEARNING_READ_ONLY": "false"
-      }
-    }
-  }
-}
-```
-
-### 4. HTTP 远程模式
-
-```bash
-MCP_TRANSPORT=streamable-http \
-MCP_HOST=0.0.0.0 MCP_PORT=8080 \
-MCP_AUTH_TOKEN=your-strong-token \
-YEARNING_URL=http://your-yearning:8000 \
-YEARNING_USERNAME=your-user \
-YEARNING_PASSWORD=your-password \
-YEARNING_READ_ONLY=false \
-npm start
-```
-
-客户端连接：`http://localhost:8080/mcp`，Header：`Authorization: Bearer your-strong-token`。  
-健康检查：`GET /health`（免鉴权）。
 
 ## 环境变量
 
@@ -133,6 +89,51 @@ npm start
 | `MCP_HOST` / `MCP_PORT` | HTTP 监听 | `0.0.0.0` / `8080` |
 | `MCP_AUTH_TOKEN` | HTTP Bearer 鉴权 | （不设则不鉴权） |
 | `MCP_STATELESS_HTTP` | 无状态 HTTP | `false` |
+
+## HTTP 远程模式
+
+```bash
+MCP_TRANSPORT=streamable-http \
+MCP_HOST=0.0.0.0 MCP_PORT=8080 \
+MCP_AUTH_TOKEN=your-strong-token \
+YEARNING_URL=http://your-yearning:8000 \
+YEARNING_USERNAME=your-user \
+YEARNING_PASSWORD=your-password \
+YEARNING_READ_ONLY=false \
+npx -y @rubyls/yearning-mcp
+```
+
+客户端连接：`http://localhost:8080/mcp`，Header：`Authorization: Bearer your-strong-token`。  
+健康检查：`GET /health`（免鉴权）。
+
+## 从源码运行
+
+```bash
+git clone https://github.com/rubyLs/yearning_mcp.git
+cd yearning_mcp
+npm install
+npm run build
+npm start
+```
+
+Cursor 本地调试：
+
+```json
+{
+  "mcpServers": {
+    "yearning": {
+      "command": "node",
+      "args": ["/absolute/path/to/yearning_mcp/dist/index.js"],
+      "env": {
+        "YEARNING_URL": "http://localhost:8000",
+        "YEARNING_USERNAME": "your-user",
+        "YEARNING_PASSWORD": "your-password",
+        "YEARNING_READ_ONLY": "false"
+      }
+    }
+  }
+}
+```
 
 ## 对话示例
 
@@ -159,6 +160,7 @@ CREATE TABLE t_demo (id INT PRIMARY KEY, name VARCHAR(64));
 npm run dev          # tsx 直接跑 src
 npm run build        # 编译到 dist/
 npm start            # node dist/index.js
+npm publish --access public   # 发布到 npm（需先 npm login）
 ```
 
 ## 已知限制

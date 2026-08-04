@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "yearning": {
-      "command": "node",
-      "args": ["/absolute/path/to/yearning_mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@rubyls/yearning-mcp"],
       "env": {
         "YEARNING_URL": "http://localhost:8000",
         "YEARNING_USERNAME": "your-user",
