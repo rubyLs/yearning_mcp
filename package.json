@@ -1,6 +1,6 @@
 {
   "name": "@rubyls/yearning-mcp",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Yearning SQL 审核平台 MCP Server：工单提交/审核/查询/表结构探查",
   "type": "module",
   "main": "dist/index.js",
@@ -20,8 +20,8 @@
     "dev": "tsx src/index.ts",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build",
-    "docker:build": "docker build -t yearning-mcp:latest . && docker tag yearning-mcp:latest rubyls/yearning-mcp:latest && docker tag yearning-mcp:latest rubyls/yearning-mcp:1.1.0",
-    "docker:push": "docker push rubyls/yearning-mcp:1.1.0 && docker push rubyls/yearning-mcp:latest"
+    "docker:build": "docker build -t yearning-mcp:latest . && docker tag yearning-mcp:latest rubyls/yearning-mcp:latest && docker tag yearning-mcp:latest rubyls/yearning-mcp:1.1.1",
+    "docker:push": "docker push rubyls/yearning-mcp:1.1.1 && docker push rubyls/yearning-mcp:latest"
   },
   "keywords": [
     "mcp",
