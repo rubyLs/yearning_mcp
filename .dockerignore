@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.gitignore
+.env
+.idea
+*.log
+*.tsbuildinfo
+coverage
+.mcp.json.example
+*.tgz
+Dockerfile

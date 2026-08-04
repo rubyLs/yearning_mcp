@@ -35,6 +35,46 @@ npm i -g @rubyls/yearning-mcp
 yearning-mcp
 ```
 
+## Docker（单容器 HTTP）
+
+镜像默认 **streamable-http**，监听 `8080`。
+
+```bash
+# 构建
+docker build -t yearning-mcp:latest .
+# 或 npm run docker:build
+
+# 运行
+docker run -d --name yearning-mcp -p 8080:8080 \
+  -e MCP_AUTH_TOKEN=your-strong-token \
+  -e YEARNING_URL=http://your-yearning:8000 \
+  -e YEARNING_USERNAME=your-user \
+  -e YEARNING_PASSWORD=your-password \
+  -e YEARNING_READ_ONLY=false \
+  yearning-mcp:latest
+```
+
+- 健康检查：`GET http://localhost:8080/health`
+- MCP 端点：`http://localhost:8080/mcp`
+- Header：`Authorization: Bearer <MCP_AUTH_TOKEN>`
+
+Cursor 连接示例：
+
+```json
+{
+  "mcpServers": {
+    "yearning": {
+      "url": "http://localhost:8080/mcp",
+      "headers": {
+        "Authorization": "Bearer your-strong-token"
+      }
+    }
+  }
+}
+```
+
+> 容器内访问宿主机 Yearning 时，macOS/Windows 可用 `host.docker.internal` 代替 `localhost`。
+
 ## 功能一览
 
 ### 只读工具（14）
