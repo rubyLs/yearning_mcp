@@ -1,0 +1,6 @@
+src/
+tests/
+*.tsbuildinfo
+.env
+.mcp.json.example
+tsconfig.json
