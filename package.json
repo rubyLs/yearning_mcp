@@ -1,6 +1,6 @@
 {
   "name": "@rubyls/yearning-mcp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Yearning SQL 审核平台 MCP Server：工单提交/审核/查询/表结构探查",
   "type": "module",
   "main": "dist/index.js",
