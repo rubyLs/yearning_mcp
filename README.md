@@ -37,21 +37,27 @@ yearning-mcp
 
 ## Docker（单容器 HTTP）
 
-镜像默认 **streamable-http**，监听 `8080`。
+镜像已发布到 Docker Hub：[`rubyls/yearning-mcp`](https://hub.docker.com/r/rubyls/yearning-mcp)
 
 ```bash
-# 构建
-docker build -t yearning-mcp:latest .
-# 或 npm run docker:build
-
-# 运行
+# 直接拉取运行（推荐）
 docker run -d --name yearning-mcp -p 8080:8080 \
   -e MCP_AUTH_TOKEN=your-strong-token \
   -e YEARNING_URL=http://your-yearning:8000 \
   -e YEARNING_USERNAME=your-user \
   -e YEARNING_PASSWORD=your-password \
   -e YEARNING_READ_ONLY=false \
-  yearning-mcp:latest
+  rubyls/yearning-mcp:latest
+
+# 指定版本
+# rubyls/yearning-mcp:1.1.0
+```
+
+本地构建（可选）：
+
+```bash
+docker build -t yearning-mcp:latest .
+# 或 npm run docker:build
 ```
 
 - 健康检查：`GET http://localhost:8080/health`
@@ -74,6 +80,14 @@ Cursor 连接示例：
 ```
 
 > 容器内访问宿主机 Yearning 时，macOS/Windows 可用 `host.docker.internal` 代替 `localhost`。
+
+维护者推送镜像：
+
+```bash
+npm run docker:build
+npm run docker:push
+# 需已 docker login，镜像会打上 rubyls/yearning-mcp:1.1.0 与 :latest
+```
 
 ## 功能一览
 
