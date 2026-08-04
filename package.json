@@ -1,0 +1,42 @@
+{
+  "name": "yearning-mcp",
+  "version": "1.0.0",
+  "description": "Yearning SQL 审核平台 MCP Server（TypeScript）：工单提交/审核/查询/表结构",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "yearning-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "mcp",
+    "yearning",
+    "sql-audit",
+    "model-context-protocol"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "express": "^5.2.1",
+    "msgpackr": "^2.0.5",
+    "undici": "^7.29.0",
+    "ws": "^8.21.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.13.10",
+    "@types/ws": "^8.18.1",
+    "tsx": "^4.23.5",
+    "typescript": "^5.8.2"
+  }
+}

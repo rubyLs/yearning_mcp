@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "yearning": {
+      "command": "node",
+      "args": ["/absolute/path/to/yearning_mcp/dist/index.js"],
+      "env": {
+        "YEARNING_URL": "http://localhost:8000",
+        "YEARNING_USERNAME": "your-user",
+        "YEARNING_PASSWORD": "your-password",
+        "YEARNING_LOGIN_TYPE": "general",
+        "YEARNING_READ_ONLY": "false"
+      }
+    }
+  }
+}
