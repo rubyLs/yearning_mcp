@@ -8,7 +8,7 @@ Yearning SQL 审核平台的 MCP Server（TypeScript）。不只读查询，还�
 
 ## 快速接入（推荐）
 
-发布到 npm 后，在 Cursor / Claude Desktop 的 MCP 配置中：
+在 Cursor / Claude Desktop 的 MCP 配置中：
 
 ```json
 {
