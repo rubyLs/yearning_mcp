@@ -229,9 +229,10 @@ export class YearningClient extends YearningClientBase {
   ): Promise<string> {
     const result = (await this.request("POST", "/query/post", {
       jsonBody: { source_id: sourceId, export: exportFlag, text },
+      allowEmptyResponse: true,
     })) as string;
     // 查询审核关闭时 Yearning 直接落库一条已批准工单，且不返回任何内容
-    return result || "工单已创建（查询审核关闭，已自动批准）";
+    return result === "" ? "工单已创建（查询审核关闭，已自动批准）" : result;
   }
 
   async runQuery(

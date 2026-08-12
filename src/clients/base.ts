@@ -135,6 +135,8 @@ export class YearningClientBase {
       params?: Record<string, string | number | boolean | undefined | null>;
       jsonBody?: unknown;
       retried?: boolean;
+      /** 仅用于成功时不写响应体的接口（如 /query/post） */
+      allowEmptyResponse?: boolean;
     } = {},
   ): Promise<unknown> {
     await this.ensureToken();
@@ -166,7 +168,7 @@ export class YearningClientBase {
       throw new YearningApiError(`HTTP ${resp.status}: ${text}`, resp.status);
     }
 
-    return this.unwrap(resp);
+    return this.unwrap(resp, options.allowEmptyResponse === true);
   }
 
   /** 原生 http(s) 请求，允许 GET 携带 body（Yearning 特殊约定） */
@@ -244,7 +246,7 @@ export class YearningClientBase {
     });
   }
 
-  private async unwrap(resp: HttpResponse): Promise<unknown> {
+  private async unwrap(resp: HttpResponse, allowEmpty = false): Promise<unknown> {
     const ctype = resp.headers["content-type"] || "";
     if (ctype.includes("application/json")) {
       let data: unknown;
@@ -269,8 +271,11 @@ export class YearningClientBase {
     }
 
     const text = (await resp.text()).trim();
-    // Yearning 部分接口成功时裸 return，不写响应体（如查询审核关闭时的 /query/post）
-    if (!text) return "";
-    throw new YearningApiError(text, 5555);
+    // Yearning 部分接口成功时裸 return，不写响应体（如查询审核关闭时的 /query/post）；
+    // 3xx 亦无响应体，但 rawRequest 不跟随重定向，故仅认 2xx
+    if (!text && allowEmpty && resp.status >= 200 && resp.status < 300) {
+      return "";
+    }
+    throw new YearningApiError(text || "未知错误", 5555);
   }
 }
