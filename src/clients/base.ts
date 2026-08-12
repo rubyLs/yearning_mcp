@@ -269,6 +269,8 @@ export class YearningClientBase {
     }
 
     const text = (await resp.text()).trim();
-    throw new YearningApiError(text || "未知错误", 5555);
+    // Yearning 部分接口成功时裸 return，不写响应体（如查询审核关闭时的 /query/post）
+    if (!text) return "";
+    throw new YearningApiError(text, 5555);
   }
 }
