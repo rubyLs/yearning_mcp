@@ -50,7 +50,7 @@ docker run -d --name yearning-mcp -p 8080:8080 \
   rubyls/yearning-mcp:latest
 
 # 指定版本
-# rubyls/yearning-mcp:1.1.1
+# rubyls/yearning-mcp:1.1.3
 ```
 
 本地构建（可选）：
@@ -86,7 +86,7 @@ Cursor 连接示例：
 ```bash
 npm run docker:build
 npm run docker:push
-# 需已 docker login，镜像会打上 rubyls/yearning-mcp:1.1.1 与 :latest
+# 需已 docker login，镜像会打上 rubyls/yearning-mcp:1.1.3 与 :latest
 ```
 
 ## 功能一览
